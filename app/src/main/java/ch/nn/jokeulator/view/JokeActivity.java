@@ -64,12 +64,11 @@ public class JokeActivity extends AppCompatActivity {
     }
 
     private void initJoke() {
-        findViewById(R.id.joke_text);
         this.jokeText.setText(this.jokeService.loadJoke(this.jokeApi));
     }
 
     public void skipJoke(View view) {
-
+        this.initJoke();
     }
 
     public void changeJokeCategory(View view) {

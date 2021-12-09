@@ -33,10 +33,14 @@ public class JokeService extends Service implements SensorEventListener {
     private final IBinder binder = new JokeBinder();
 
 
-    private final static int SAMPLING_RATE = 10000000 ; // in microseconds
+    private final static int SAMPLING_RATE = 10000000; // in microseconds
     private SensorManager sensorManager;
     private Sensor sensor;
     public ObservableFloat laughRate = new ObservableFloat(0);
+
+    private float x, y, z;
+    private float last_x, last_y, last_z;
+    private long lastUpdate;
 
 
     private void initializeSensor() {
@@ -51,7 +55,24 @@ public class JokeService extends Service implements SensorEventListener {
     }
 
     private void calculateLaughRate(float[] values) {
-        this.laughRate.set((Math.abs(values[0]) + Math.abs(values[1]) + Math.abs(values[2])) / 3);
+        long curTime = System.currentTimeMillis();
+        long diffTime = (curTime - lastUpdate);
+
+        x = values[0];
+        y = values[1];
+        z = values[2];
+
+        float speed = Math.abs(x + y + z - last_x - last_y - last_z) / diffTime * 10000;
+        if ((curTime - lastUpdate) > 1500) {
+            this.laughRate.set(speed);
+            lastUpdate = curTime;
+        } else if (this.laughRate.get() < speed){
+            this.laughRate.set(speed);
+        }
+
+        last_x = x;
+        last_y = y;
+        last_z = z;
     }
 
     @Override

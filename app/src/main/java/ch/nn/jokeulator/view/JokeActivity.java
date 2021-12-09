@@ -19,6 +19,7 @@ public class JokeActivity extends AppCompatActivity {
 
     private JokeApi jokeApi;
     private JokeService jokeService;
+    private TextView jokeCategory, jokeText;
 
     private final ServiceConnection connection = new ServiceConnection() {
         @Override
@@ -36,18 +37,19 @@ public class JokeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.initExtras();
 
         Intent service = new Intent(this, JokeService.class);
         bindService(service, connection, Context.BIND_AUTO_CREATE);
         setContentView(R.layout.activity_joke);
 
-        initComponents();
+        this.initComponents();
+        this.initExtras();
+
     }
 
     private void initComponents() {
-        TextView categoryTitle = findViewById(R.id.joke_category);
-        categoryTitle.setText(jokeApi.name);
+        jokeCategory = findViewById(R.id.joke_category);
+        jokeText = findViewById(R.id.joke_text);
     }
 
     @Override
@@ -58,10 +60,12 @@ public class JokeActivity extends AppCompatActivity {
 
     private void initExtras() {
         this.jokeApi = new JokeApi(getIntent().getStringExtra("jokeApi"), getIntent().getStringExtra("jokeApiName"), getIntent().getStringExtra("jokeApiJsonLabel"));
+        jokeCategory.setText(jokeApi.name);
     }
 
     private void initJoke() {
-        this.jokeService.loadJoke(this.jokeApi);
+        findViewById(R.id.joke_text);
+        this.jokeText.setText(this.jokeService.loadJoke(this.jokeApi));
     }
 
     public void skipJoke(View view) {

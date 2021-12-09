@@ -3,9 +3,7 @@ package ch.nn.jokeulator.service;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
 import android.util.JsonReader;
 
 import androidx.annotation.Nullable;
@@ -16,8 +14,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import ch.nn.jokeulator.model.JokeApi;
 
@@ -25,6 +24,7 @@ public class JokeService extends Service {
 
     private final IBinder binder = new JokeBinder();
     public static final String CHARSET_NAME = "UTF-8";
+    public static final String DEFAULT_JOKE_TEXT = "Could not load joke :(";
 
 
     public class JokeBinder extends Binder {
@@ -40,16 +40,8 @@ public class JokeService extends Service {
     }
 
     public String loadJoke(JokeApi jokeApi) {
-        getJoke(jokeApi);
-        return "";
-    }
-
-    private void getJoke(JokeApi jokeApi) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        Handler handler = new Handler(Looper.myLooper());
-
-        executor.execute(() -> {
-            String joke = "-";
+        Future<String> jokeFuture = Executors.newSingleThreadExecutor().submit(() -> {
+            String joke = DEFAULT_JOKE_TEXT;
             try {
                 URL url = new URL(jokeApi.api);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -70,10 +62,15 @@ public class JokeService extends Service {
                 e.printStackTrace();
             }
 
-            String finalJoke = joke;
-            handler.post(() -> {
-                System.out.println(finalJoke);
-            });
+            return joke;
         });
+
+        try {
+            return jokeFuture.get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return DEFAULT_JOKE_TEXT;
     }
 }

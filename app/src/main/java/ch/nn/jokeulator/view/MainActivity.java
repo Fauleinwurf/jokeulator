@@ -1,13 +1,13 @@
 package ch.nn.jokeulator.view;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import ch.nn.jokeulator.R;
-import ch.nn.jokeulator.model.JokeType;
+import ch.nn.jokeulator.model.JokeApi;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,16 +18,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startActivityFirstButton(View view) {
-        startJokeActivity(JokeType.DAD_JOKES);
+        startJokeActivity(JokeApi.DAD_JOKES);
     }
 
     public void startActivitySecondButton(View view) {
-        startJokeActivity(JokeType.CHUCK_NORRIS_JOKES);
+        startJokeActivity(JokeApi.CHUCK_NORRIS_JOKES);
     }
 
-    private void startJokeActivity(String jokeType) {
+    private void startJokeActivity(String jokeApi) {
         Intent intent = new Intent(getBaseContext(), JokeActivity.class);
-        intent.putExtra("jokeApi", jokeType);
+        intent.putExtra("jokeApi", jokeApi);
         startActivity(intent);
     }
 }

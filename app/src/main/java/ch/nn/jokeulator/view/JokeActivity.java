@@ -1,5 +1,6 @@
 package ch.nn.jokeulator.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -33,6 +34,7 @@ public class JokeActivity extends AppCompatActivity {
     }
 
     public void changeJokeCategory(View view) {
-
+        Intent intent = new Intent(getBaseContext(), MainActivity.class);
+        startActivity(intent);
     }
 }

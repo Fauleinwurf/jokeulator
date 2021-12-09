@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">Jokeulator</string>
-    <string name="first_joke_button">Dad jokes</string>
-    <string name="second_joke_button">Chuck Norris jokes</string>
     <string name="laughRate">Laughrate: </string>
     <string name="default_laughRate">0.0 </string>
     <string name="default_joke_text">The joke has not loaded yet</string>

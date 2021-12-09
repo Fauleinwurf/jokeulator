@@ -29,22 +29,6 @@
             android:layout_marginTop="40dp"
             android:orientation="vertical"
             android:padding="30dp">
-
-            <Button
-                android:id="@+id/first_joke_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:onClick="startActivityFirstButton"
-                android:text="@string/first_joke_button" />
-
-            <Button
-                android:id="@+id/second_joke_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:onClick="startActivitySecondButton"
-                android:text="@string/second_joke_button" />
         </LinearLayout>
 
     </LinearLayout>

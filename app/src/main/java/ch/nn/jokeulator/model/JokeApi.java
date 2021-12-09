@@ -1,8 +1,11 @@
 package ch.nn.jokeulator.model;
 
-public enum JokeApi {
-    ;
+public class JokeApi {
+    public final String api;
+    public final String name;
 
-    public static final String CHUCK_NORRIS_JOKES = "https://api.chucknorris.io/jokes/random";
-    public static final String DAD_JOKES = "api";
+    public JokeApi(String api, String name) {
+        this.api = api;
+        this.name = name;
+    }
 }

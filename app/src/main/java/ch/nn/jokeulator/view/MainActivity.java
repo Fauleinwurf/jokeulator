@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
             layout.setMargins(0,0,0,5);
             button.setLayoutParams(layout);
             button.setText(api.name);
+            button.setBackgroundColor(getResources().getColor(R.color.purple_200));
 
             linearLayout.addView(button);
         }

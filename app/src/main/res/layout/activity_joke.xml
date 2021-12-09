@@ -35,8 +35,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:onClick="changeJokeCategory"
-                android:src="@android:drawable/ic_popup_sync"
-                android:contentDescription="@string/change_joke_button" />
+                android:src="@android:drawable/ic_menu_revert"
+                android:contentDescription="@string/change_joke_button"
+                app:tint="@color/purple_500" />
         </LinearLayout>
 
         <TextView
@@ -72,7 +73,8 @@
                 android:layout_weight="1"
                 android:onClick="skipJoke"
                 android:src="@android:drawable/ic_media_ff"
-                android:contentDescription="@string/skip_joke_button" />
+                android:contentDescription="@string/skip_joke_button"
+                app:tint="@color/purple_500"/>
         </LinearLayout>
 
     </LinearLayout>

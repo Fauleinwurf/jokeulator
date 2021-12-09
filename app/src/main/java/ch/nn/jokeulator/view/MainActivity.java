@@ -13,7 +13,7 @@ import ch.nn.jokeulator.model.JokeApi;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final JokeApi[] jokeApis = new JokeApi[]{new JokeApi("https://api.chucknorris.io/jokes/random", "Chuck Norris jokes")};
+    private final JokeApi[] jokeApis = new JokeApi[]{new JokeApi("https://api.chucknorris.io/jokes/random/", "Chuck Norris jokes", "value")};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
                 startJokeActivity(api);
             });
             LinearLayout.LayoutParams layout = new LinearLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-            layout.setMargins(0,0,0,5);
+            layout.setMargins(0, 0, 0, 5);
             button.setLayoutParams(layout);
             button.setText(api.name);
             button.setBackgroundColor(getResources().getColor(R.color.purple_200));
@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(getBaseContext(), JokeActivity.class);
         intent.putExtra("jokeApi", api.api);
         intent.putExtra("jokeApiName", api.name);
+        intent.putExtra("jokeApiJsonLabel", api.jsonLabel);
         startActivity(intent);
     }
 }

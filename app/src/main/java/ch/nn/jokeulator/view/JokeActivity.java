@@ -4,12 +4,14 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.icu.text.DecimalFormat;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.Observable;
 
 import ch.nn.jokeulator.R;
 import ch.nn.jokeulator.model.JokeApi;
@@ -19,14 +21,17 @@ public class JokeActivity extends AppCompatActivity {
 
     private JokeApi jokeApi;
     private JokeService jokeService;
-    private TextView jokeCategory, jokeText;
+    private TextView jokeCategory, jokeText, laughRate;
+    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.0");
 
     private final ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             JokeService.JokeBinder binder = (JokeService.JokeBinder) service;
             jokeService = binder.getService();
+
             initJoke();
+            initLaughRate();
         }
 
         @Override
@@ -47,15 +52,26 @@ public class JokeActivity extends AppCompatActivity {
 
     }
 
-    private void initComponents() {
-        jokeCategory = findViewById(R.id.joke_category);
-        jokeText = findViewById(R.id.joke_text);
-    }
-
     @Override
     protected void onStop() {
         super.onStop();
         unbindService(connection);
+    }
+
+    private void initComponents() {
+        jokeCategory = findViewById(R.id.joke_category);
+        jokeText = findViewById(R.id.joke_text);
+        laughRate = findViewById(R.id.laugh_rate_value);
+    }
+
+    private void initLaughRate() {
+        this.jokeService.laughRate.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable sender, int propertyId) {
+                laughRate.setText(DECIMAL_FORMAT.format(jokeService.laughRate.get()));
+
+            }
+        });
     }
 
     private void initExtras() {

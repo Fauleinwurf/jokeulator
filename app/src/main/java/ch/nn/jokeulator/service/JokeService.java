@@ -34,18 +34,15 @@ public class JokeService extends Service implements SensorEventListener {
 
 
     private final static int SAMPLING_RATE = 10000000; // in microseconds
-    private SensorManager sensorManager;
-    private Sensor sensor;
     public ObservableFloat laughRate = new ObservableFloat(0);
 
-    private float x, y, z;
     private float last_x, last_y, last_z;
     private long lastUpdate;
 
 
     private void initializeSensor() {
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         sensorManager.registerListener(this, sensor, SAMPLING_RATE);
     }
 
@@ -58,15 +55,15 @@ public class JokeService extends Service implements SensorEventListener {
         long curTime = System.currentTimeMillis();
         long diffTime = (curTime - lastUpdate);
 
-        x = values[0];
-        y = values[1];
-        z = values[2];
+        float x = values[0];
+        float y = values[1];
+        float z = values[2];
 
         float speed = Math.abs(x + y + z - last_x - last_y - last_z) / diffTime * 10000;
         if ((curTime - lastUpdate) > 1500) {
             this.laughRate.set(speed);
             lastUpdate = curTime;
-        } else if (this.laughRate.get() < speed){
+        } else if (this.laughRate.get() < speed) {
             this.laughRate.set(speed);
         }
 
@@ -102,15 +99,8 @@ public class JokeService extends Service implements SensorEventListener {
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 InputStream inputStream = new BufferedInputStream(connection.getInputStream());
                 JsonReader reader = new JsonReader(new InputStreamReader(inputStream, CHARSET_NAME));
-                reader.beginObject();
-                while (reader.hasNext()) {
-                    String name = reader.nextName();
-                    if (name.equals(jokeApi.jsonLabel)) {
-                        joke = reader.nextString();
-                    } else {
-                        reader.skipValue();
-                    }
-                }
+                reader.setLenient(true);
+                joke = jokeApi.getJokeJson(reader);
                 reader.close();
                 inputStream.close();
             } catch (IOException e) {

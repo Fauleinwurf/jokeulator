@@ -15,6 +15,7 @@ import androidx.databinding.Observable;
 
 import ch.nn.jokeulator.R;
 import ch.nn.jokeulator.model.JokeApi;
+import ch.nn.jokeulator.model.JokeApiEnum;
 import ch.nn.jokeulator.service.JokeService;
 
 public class JokeActivity extends AppCompatActivity {
@@ -75,7 +76,7 @@ public class JokeActivity extends AppCompatActivity {
     }
 
     private void initExtras() {
-        this.jokeApi = new JokeApi(getIntent().getStringExtra("jokeApi"), getIntent().getStringExtra("jokeApiName"), getIntent().getStringExtra("jokeApiJsonLabel"));
+        this.jokeApi = JokeApiEnum.valueOf(getIntent().getStringExtra("jokeApiEnum")).api;
         jokeCategory.setText(jokeApi.name);
     }
 

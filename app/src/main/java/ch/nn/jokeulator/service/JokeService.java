@@ -61,10 +61,10 @@ public class JokeService extends Service implements SensorEventListener {
 
         float speed = Math.abs(x + y + z - last_x - last_y - last_z) / diffTime * 10000;
         if ((curTime - lastUpdate) > 1500) {
-            this.laughRate.set(speed);
+            this.laughRate.set(speed / 100);
             lastUpdate = curTime;
         } else if (this.laughRate.get() < speed) {
-            this.laughRate.set(speed);
+            this.laughRate.set(speed / 100);
         }
 
         last_x = x;

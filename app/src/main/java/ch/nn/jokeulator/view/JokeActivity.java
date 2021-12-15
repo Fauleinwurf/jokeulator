@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.icu.text.DecimalFormat;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -31,7 +32,7 @@ public class JokeActivity extends AppCompatActivity {
             JokeService.JokeBinder binder = (JokeService.JokeBinder) service;
             jokeService = binder.getService();
 
-            initJoke();
+            initJoke(false);
             initLaughRate();
         }
 
@@ -50,7 +51,11 @@ public class JokeActivity extends AppCompatActivity {
 
         this.initComponents();
         this.initExtras();
+    }
 
+    private String loadJokeFromPreferences() {
+        SharedPreferences prefs = getPrefs();
+        return prefs.getString(buildJokeKey(), JokeService.DEFAULT_JOKE_TEXT);
     }
 
     @Override
@@ -80,16 +85,35 @@ public class JokeActivity extends AppCompatActivity {
         jokeCategory.setText(jokeApi.name);
     }
 
-    private void initJoke() {
-        this.jokeText.setText(this.jokeService.loadJoke(this.jokeApi));
+    private void initJoke(boolean needsNewJoke) {
+        String jokeText;
+
+        if (getPrefs().contains(buildJokeKey()) && !needsNewJoke) {
+            jokeText = loadJokeFromPreferences();
+        } else {
+            jokeText = this.jokeService.loadJoke(this.jokeApi);
+            SharedPreferences.Editor editor = getPrefs().edit();
+            editor.putString(buildJokeKey() , jokeText);
+            editor.apply();
+        }
+
+        this.jokeText.setText(jokeText);
     }
 
     public void skipJoke(View view) {
-        this.initJoke();
+        this.initJoke(true);
+    }
+
+    private String buildJokeKey(){
+        return  "JOKE_TEXT_" + this.jokeApi.name.toUpperCase();
     }
 
     public void changeJokeCategory(View view) {
         Intent intent = new Intent(getBaseContext(), MainActivity.class);
         startActivity(intent);
+    }
+
+    private SharedPreferences getPrefs() {
+        return getPreferences(Context.MODE_PRIVATE);
     }
 }

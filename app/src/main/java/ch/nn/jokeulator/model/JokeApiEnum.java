@@ -11,7 +11,6 @@ public enum JokeApiEnum {
     DAD(new JokeApi("https://api.dadjokes.io/api/random/joke/", "Dad Jokes", "setup"){
         @Override
         public String getJokeJson(JsonReader reader) throws IOException {
-
             reader.beginObject();
             reader.nextName();
             reader.skipValue();

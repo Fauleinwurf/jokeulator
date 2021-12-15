@@ -15,17 +15,22 @@ public class DadJokeApi extends JokeApi {
     public String getJokeJson(JsonReader reader) throws IOException {
 
         reader.beginObject();
+        reader.nextName();
+        reader.skipValue();
+        reader.nextName();
         reader.beginArray();
         reader.beginObject();
-        reader.beginArray();
+        StringBuilder joke = new StringBuilder(JokeService.DEFAULT_JOKE_TEXT);
         while (reader.hasNext()) {
             String name = reader.nextName();
             if (name.equals(this.jsonLabel)) {
-                return reader.nextString() + "\n " + reader.nextString();
+                joke.append(reader.nextString()).append("\n\n");
+                reader.nextName();
+                joke.append(reader.nextString()).append("\n\n");
             } else {
                 reader.skipValue();
             }
         }
-        return JokeService.DEFAULT_JOKE_TEXT;
+        return joke.toString();
     }
 }

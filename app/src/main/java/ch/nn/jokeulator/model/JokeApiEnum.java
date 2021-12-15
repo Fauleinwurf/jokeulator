@@ -21,6 +21,7 @@ public enum JokeApiEnum {
             while (reader.hasNext()) {
                 String name = reader.nextName();
                 if (name.equals(this.jsonLabel)) {
+                    joke.setLength(0);
                     joke.append(reader.nextString()).append("\n\n");
                     reader.nextName();
                     joke.append(reader.nextString()).append("\n\n");
